@@ -233,7 +233,7 @@ const Hero = () => {
 
         {/* CTA Button */}
         <motion.a
-          href="/beta"
+          href="/beta-signup"
           className="group relative inline-flex items-center justify-center px-8 py-4 overflow-hidden text-lg font-semibold text-white rounded-full bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 transition-all"
           whileHover={{ scale: 1.05 }}
         >

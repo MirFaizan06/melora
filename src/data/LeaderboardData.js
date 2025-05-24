@@ -11,6 +11,6 @@ export const leaderboardData = [
   { id: "mel_110", name: "asdasd", score: 7300 },
   { id: "mel_111", name: "fkfkf", score: 7100 },
   { id: "mel_112", name: "user3321", score: 7000 },
-  { id: "mel_113", name: "guest5510", score: 6987 },
+  { id: "mel_113", name: "guest5510", score: 6969 },
   { id: "mel_114", name: "harry", score: 6911 },
 ];
