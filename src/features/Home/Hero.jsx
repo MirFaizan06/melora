@@ -53,37 +53,37 @@ const midiTracks = [
     title: "Prelude in C",
     artist: "Bach",
     duration: "2:31",
-    src: "/audios/J.S. Bach - Prelude in C Major - Rousseau.mp3",
+    src: "/J.S. Bach - Prelude in C Major - Rousseau.mp3",
   },
   {
     title: "Fur Elise",
     artist: "Beethoven",
     duration: "2:43",
-    src: "/audios/Beethoven - Für Elise - Rousseau.mp3",
+    src: "/Beethoven - Für Elise - Rousseau.mp3",
   },
   {
     title: "River Flows In You",
     artist: "Yiruma",
     duration: "3:10",
-    src: "/audios/Yiruma - River Flows in You - Rousseau.mp3",
+    src: "/Yiruma - River Flows in You - Rousseau.mp3",
   },
   {
     title: "Nocturne Op.9 No.2",
     artist: "Chopin",
     duration: "3:47",
-    src: "/audios/Chopin - Nocturne in E Flat Major (Op. 9 No. 2) - Rousseau.mp3",
+    src: "/Chopin - Nocturne in E Flat Major (Op. 9 No. 2) - Rousseau.mp3",
   },
   {
     title: "Clair de Lune",
     artist: "Debussy",
     duration: "4:01",
-    src: "/audios/Debussy - Clair de Lune - Rousseau.mp3",
+    src: "/Debussy - Clair de Lune - Rousseau.mp3",
   },
   {
     title: "Canon in D",
     artist: "Pachelbel",
     duration: "4:21",
-    src: "/audios/Canon in D - Pachelbel - Kassia.mp3",
+    src: "/Canon in D - Pachelbel - Kassia.mp3",
   },
 ];
 
