@@ -1,0 +1,41 @@
+1. Fix the sizing of timer for mobile.
+
+2. Fix the mobile-menu bg.
+
+3. Consistent sizing of artist section.
+
+4. Add more 2 tracks.
+
+5. Add dummy screenshots.
+
+6. Create a Dashboard for in-game user profile. User related stats like: avatar, frame, banner, in-game stats, friends list, account status, etc etc.
+
+7. Modify the leaderboard and add more filters, add season filter too, and all time too. Add pagination too.
+
+8. Make a dedicated ranking stage for top 3 players.
+
+9. Add chat system, AI support and Mod chat too. Also add "request a song".
+
+10. Add other game stats too like: Most played song of the week, of the month, of the year, etc etc. Also create a single header field "Stats" and then all other comes under it like "Seasonal leaderboard, Game stat history, Song Stats".
+
+11. Make a tutorial component for the game too.
+
+12. Use better state-management for registering etc.
+
+13. Use better state-management in header too.
+
+14. Change the title of page dynamically.
+
+15. Add more shop items.
+
+
+-> Plan the API. 
+-> Plan the Admin Panel.
+-> Plan the Database and CMS.
+-> Also keep in mind everything is to be integrated in game too like everything has to be synchronized and live updated.
+
+
+GIT commands:
+git add .
+git commit -m "fixed cta again2.."
+git push
