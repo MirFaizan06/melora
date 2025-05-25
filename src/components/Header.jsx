@@ -39,7 +39,7 @@ export default function Header() {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="absolute md:hidden top-16 left-0 right-0 bg-gray-850 border-b border-gray-700 z-50 p-6 space-y-4 shadow-xl">
+          <div className="absolute md:hidden top-16 left-0 right-0 bg-black border-b border-gray-700 z-50 p-6 space-y-4 shadow-xl">
             <MobileNavLink to="/" onClick={() => setIsMenuOpen(false)}>
               Home
             </MobileNavLink>

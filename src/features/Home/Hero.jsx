@@ -9,13 +9,14 @@ import {
   FiAward,
   FiYoutube,
   FiDisc,
+  FiHeart,
 } from "react-icons/fi";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectCreative } from "swiper/modules";
 import "swiper/css";
 import { Link } from "react-router-dom";
 
-const releaseDate = new Date("2026-08-01T00:00:00");
+const releaseDate = new Date("2026-12-01T00:00:00");
 const MotionLink = motion(Link);
 
 const taglines = [
@@ -36,11 +37,13 @@ const artists = [
     piece: "Eine kleine Nachtmusik",
   },
   { name: "Nobuo Uematsu", era: "Modern", piece: "One-Winged Angel" },
+  { name: "Hiroyuki Sawano", era: "Modern", piece: "YouSeeBigGirl" },
+
 ];
 
 const developers = [
   { name: "NxT", role: "Lead Programmer" },
-  { name: "NxT 2", role: "2nd Lead Programmer" },
+  { name: "Faizan", role: "2nd Lead Programmer" },
   { name: "Haru", role: "Music Director" },
   { name: "NxT", role: "Assistant Music Director" },
   { name: "Harry", role: "UI/UX Designer" },
@@ -90,8 +93,8 @@ const midiTracks = [
   {
     title: "YouSeeBigGirl",
     artist: "SawanoHiroyuki",
-    duration: "4:21",
-    src: "/YouSeeBIGGIRL _ Apple Seed - Attack on Titan OST [Piano] - Animenz Piano Sheets.mp3.mp3",
+    duration: "6:34",
+    src: "/YouSeeBIGGIRL _ Apple Seed - Attack on Titan OST [Piano] - Animenz Piano Sheets.mp3",
   },
 ];
 
@@ -309,7 +312,7 @@ const Hero = () => {
       <section className="py-20 px-4 bg-gray-950/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-bold text-center text-emerald-400 mb-12">
-            Crafted by Visionaries
+            Developers
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {developers.map((dev, idx) => (
@@ -333,7 +336,7 @@ const Hero = () => {
             ))}
           </div>
           <p className="text-center text-gray-400 mt-8">
-            And supported by our incredible community of 50,000+ beta testers
+            And supported by our incredible community <FiHeart className="inline-block" />
           </p>
         </div>
       </section>
