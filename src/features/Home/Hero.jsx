@@ -13,8 +13,10 @@ import {
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectCreative } from "swiper/modules";
 import "swiper/css";
+import { Link } from "react-router-dom";
 
 const releaseDate = new Date("2026-08-01T00:00:00");
+const MotionLink = motion(Link);
 
 const taglines = [
   { text: "Master the rhythm, conquer the leaderboards", highlight: [3, 8] },
@@ -232,14 +234,14 @@ const Hero = () => {
         </motion.div>
 
         {/* CTA Button */}
-        <motion.a
-          href="/beta-signup"
+        <MotionLink
+          to="/beta-signup"
           className="group relative inline-flex items-center justify-center px-8 py-4 overflow-hidden text-lg font-semibold text-white rounded-full bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 transition-all"
           whileHover={{ scale: 1.05 }}
         >
           Join Exclusive Beta
           <FiAward className="ml-2 text-xl group-hover:rotate-12 transition-transform" />
-        </motion.a>
+        </MotionLink>
       </div>
 
       {/* Featured Artists Carousel */}
