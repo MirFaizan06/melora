@@ -87,6 +87,12 @@ const midiTracks = [
     duration: "4:21",
     src: "/Canon in D - Pachelbel - Kassia.mp3",
   },
+  {
+    title: "YouSeeBigGirl",
+    artist: "SawanoHiroyuki",
+    duration: "4:21",
+    src: "/YouSeeBIGGIRL _ Apple Seed - Attack on Titan OST [Piano] - Animenz Piano Sheets.mp3.mp3",
+  },
 ];
 
 const Hero = () => {
