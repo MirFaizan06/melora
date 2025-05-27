@@ -8,6 +8,7 @@ import Shop from "@/pages/Shop";
 import Support from "@/pages/Support";
 import Footer from "./components/Footer";
 import FAQ from "@/features/Support/FAQ";
+import Dashboard from "./pages/Dashboard";
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/shop" element={<Shop />} />
           <Route path="/support" element={<Support />} />
           <Route path="/faqs" element={<FAQ />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
         <Footer />
       </Router>

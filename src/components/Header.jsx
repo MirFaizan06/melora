@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FiInstagram, FiYoutube, FiDisc } from "react-icons/fi";
+import { FiUser } from "react-icons/fi";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,13 +19,14 @@ export default function Header() {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex gap-8 items-center">
           <NavLink to="/">Home</NavLink>
-          <NavLink to="/leaderboard">Leaderboard</NavLink>
+          <NavLink to="/leaderboard">Stats</NavLink>
           <NavLink to="/shop">Shop</NavLink>
           <NavLink to="/support">Support</NavLink>
           <NavLink to="/faqs">FAQs</NavLink>
           <NavLink to="/beta-signup" className="bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-2 rounded-lg hover:from-emerald-700 hover:to-teal-700 transition-all">
             Beta Signup
           </NavLink>
+          <NavLink to="/dashboard" className="text-xl md:text-2xl bg-gray-800 p-2 rounded-xl"><FiUser/></NavLink>
         </nav>
 
         {/* Mobile Menu Button */}

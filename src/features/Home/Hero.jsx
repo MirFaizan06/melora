@@ -16,7 +16,7 @@ import { Autoplay, EffectCreative } from "swiper/modules";
 import "swiper/css";
 import { Link } from "react-router-dom";
 
-const releaseDate = new Date("2026-12-01T00:00:00");
+const releaseDate = new Date("2025-12-01T00:00:00");
 const MotionLink = motion(Link);
 
 const taglines = [
@@ -221,12 +221,14 @@ const Hero = () => {
         </AnimatePresence>
 
         {/* Enhanced Countdown Timer */}
+        <h2 className="text-2xl text-center md:text-4xl font-bold bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent mb-4">Time left before game release: </h2>
         <motion.div
           className="grid grid-cols-4 gap-4 mb-8 max-w-3xl w-full"
           initial={{ scale: 0.9 }}
           animate={{ scale: 1 }}
           transition={{ type: "spring" }}
         >
+          
           {Object.entries(timeLeft).map(([unit, value]) => (
             <div
               key={unit}
