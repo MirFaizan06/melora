@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PlayerSwitcher from "@/features/dashboard/PlayerSwitcher";
 import PlayerInfo from "@/features/dashboard/PlayerInfo";
-import FriendList from "@/features/dashboard/Friendlist";
+import FriendList from "@/features/dashboard/FriendList";
 import ChatBox from "@/features/dashboard/ChatBox";
 
 export default function Dashboard() {
