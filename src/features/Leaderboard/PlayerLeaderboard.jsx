@@ -1,7 +1,7 @@
 // components/leaderboards/PlayerLeaderboard.jsx
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { leaderboardPlayers } from "@/data/LeaderboardPlayers";
+import { leaderboardPlayers } from "@/data/leaderboardPlayers";
 import TopThreeStage from "./TopThreeStage";
 
 const seasons = ["All Time", "Season 1", "Season 2"];
