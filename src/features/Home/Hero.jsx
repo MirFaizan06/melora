@@ -38,7 +38,6 @@ const artists = [
   },
   { name: "Nobuo Uematsu", era: "Modern", piece: "One-Winged Angel" },
   { name: "Hiroyuki Sawano", era: "Modern", piece: "YouSeeBigGirl" },
-
 ];
 
 const developers = [
@@ -106,10 +105,10 @@ const Hero = () => {
     seconds: 0,
   });
   const [typingIndex, setTypingIndex] = useState(0);
+  const audioRef = useRef(null);
   const [currentTrack, setCurrentTrack] = useState(null);
   const [progress, setProgress] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const audioRef = useRef(null);
+  const [durations, setDurations] = useState({}); // holds src→duration
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -134,48 +133,62 @@ const Hero = () => {
     };
   }, []);
 
-  const toggleAudio = (track) => {
-    if (currentTrack === track.src) {
-      audioRef.current.pause();
-      setCurrentTrack(null);
-      return;
-    }
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
-    const newAudio = new Audio(track.src);
-    audioRef.current = newAudio;
-    newAudio.play();
-    setCurrentTrack(track.src);
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
 
-    newAudio.addEventListener("timeupdate", () => {
-      setProgress((newAudio.currentTime / newAudio.duration) * 100);
-    });
-
-    newAudio.addEventListener("loadedmetadata", () => {
-      setDuration(newAudio.duration);
-    });
-
-    newAudio.addEventListener("ended", () => {
+    const onLoaded = () => {
+      setDurations((d) => ({ ...d, [audio.src]: audio.duration }));
+    };
+    const onTime = () => {
+      setProgress((audio.currentTime / audio.duration) * 100);
+    };
+    const onEnd = () => {
       setCurrentTrack(null);
       setProgress(0);
-    });
-  };
+    };
 
-  const seekAudio = (e) => {
-    const width = e.target.clientWidth;
-    const offsetX = e.nativeEvent.offsetX;
-    const percent = offsetX / width;
-    if (audioRef.current) {
-      audioRef.current.currentTime = percent * audioRef.current.duration;
+    audio.addEventListener("loadedmetadata", onLoaded);
+    audio.addEventListener("timeupdate", onTime);
+    audio.addEventListener("ended", onEnd);
+
+    return () => {
+      audio.removeEventListener("loadedmetadata", onLoaded);
+      audio.removeEventListener("timeupdate", onTime);
+      audio.removeEventListener("ended", onEnd);
+    };
+  }, []);
+
+  const toggleAudio = (src) => {
+    if (currentTrack === src) {
+      // Pause current
+      audioRef.current.pause();
+      setCurrentTrack(null);
+    } else {
+      // Switch to new src
+      const audio = audioRef.current;
+      audio.pause();
+      audio.src = src;
+      audio.load();
+      audio.play().catch(console.error);
+      setCurrentTrack(src);
     }
   };
 
-  const formatTime = (seconds) => {
-    if (isNaN(seconds)) return "0:00";
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+  const formatTime = (sec) => {
+    if (!sec || isNaN(sec)) return "0:00";
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60)
+      .toString()
+      .padStart(2, "0");
+    return `${m}:${s}`;
+  };
+
+  const seek = (e) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const pct = e.nativeEvent.offsetX / e.target.clientWidth;
+    audio.currentTime = pct * audio.duration;
   };
 
   return (
@@ -188,7 +201,6 @@ const Hero = () => {
         loop
         playsInline
       />
-
       {/* Main Content */}
       <div className="relative z-20 flex flex-col items-center justify-center min-h-screen w-full px-4 py-24 text-center space-y-8">
         {/* Animated Tagline */}
@@ -221,23 +233,24 @@ const Hero = () => {
         </AnimatePresence>
 
         {/* Enhanced Countdown Timer */}
-        <h2 className="text-2xl text-center md:text-4xl font-bold bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent mb-4">Time left before game release: </h2>
+        <h2 className="text-2xl text-center md:text-4xl font-bold bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent mb-4">
+          Time left before game release:{" "}
+        </h2>
         <motion.div
-          className="grid grid-cols-4 gap-4 mb-8 max-w-3xl w-full"
+          className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8 max-w-3xl w-full px-2"
           initial={{ scale: 0.9 }}
           animate={{ scale: 1 }}
           transition={{ type: "spring" }}
         >
-          
           {Object.entries(timeLeft).map(([unit, value]) => (
             <div
               key={unit}
               className="p-4 bg-gray-800/50 backdrop-blur-lg rounded-xl border border-teal-400/20"
             >
-              <div className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent mb-1">
+              <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent mb-1">
                 {value.toString().padStart(2, "0")}
               </div>
-              <div className="text-sm uppercase tracking-widest text-teal-300">
+              <div className="text-xs sm:text-sm uppercase tracking-widest text-teal-300">
                 {unit}
               </div>
             </div>
@@ -254,7 +267,6 @@ const Hero = () => {
           <FiAward className="ml-2 text-xl group-hover:rotate-12 transition-transform" />
         </MotionLink>
       </div>
-
       {/* Featured Artists Carousel */}
       <section className="w-full py-16 bg-gradient-to-b from-gray-900 to-gray-950">
         <div className="max-w-7xl mx-auto px-4">
@@ -295,113 +307,140 @@ const Hero = () => {
               <SwiperSlide key={index}>
                 <motion.div
                   whileHover={{ scale: 1.05 }}
-                  className="h-full bg-gray-800/50 backdrop-blur-md rounded-2xl p-6 border border-teal-400/20 hover:border-teal-400/40 transition-all"
+                  className="h-[260px] flex flex-col justify-between bg-gray-800/50 backdrop-blur-md rounded-2xl p-6 border border-teal-400/20 hover:border-teal-400/40 transition-all"
                 >
-                  <FiMusic className="text-3xl text-teal-400 mb-4" />
-                  <h3 className="text-xl font-semibold text-white">
-                    {artist.name}
-                  </h3>
-                  <p className="text-sm text-teal-300 mb-2">{artist.era} Era</p>
-                  <p className="text-sm text-gray-400 italic">{artist.piece}</p>
+                  <div>
+                    <FiMusic className="text-3xl text-teal-400 mb-4" />
+                    <h3 className="text-xl font-semibold text-white line-clamp-2">
+                      {artist.name}
+                    </h3>
+                    <p className="text-sm text-teal-300">{artist.era} Era</p>
+                  </div>
+                  <p className="text-sm text-gray-400 italic mt-4 line-clamp-2">
+                    {artist.piece}
+                  </p>
                 </motion.div>
               </SwiperSlide>
             ))}
           </Swiper>
         </div>
       </section>
-
+      import {useState} from "react";
       {/* Development Team */}
       <section className="py-20 px-4 bg-gray-950/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-bold text-center text-emerald-400 mb-12">
             Developers
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {developers.map((dev, idx) => (
-              <motion.div
-                key={idx}
-                whileHover={{ y: -5 }}
-                className="bg-gray-800/70 backdrop-blur-md p-6 rounded-xl border border-teal-400/20 hover:border-teal-400/40 transition-all"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="p-3 bg-teal-400/10 rounded-full">
-                    <FiUsers className="text-2xl text-teal-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-white">
-                      {dev.name}
-                    </h3>
-                    <p className="text-sm text-teal-300">{dev.role}</p>
-                  </div>
+
+          {/* Show More Feature */}
+          {(() => {
+            const isMobile =
+              typeof window !== "undefined" && window.innerWidth < 1024;
+            const [showAll, setShowAll] = useState(false);
+            const visibleDevelopers =
+              isMobile && !showAll ? developers.slice(0, 4) : developers;
+
+            return (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {visibleDevelopers.map((dev, idx) => (
+                    <motion.div
+                      key={idx}
+                      whileHover={{ y: -5 }}
+                      className="bg-gray-800/70 backdrop-blur-md p-6 rounded-xl border border-teal-400/20 hover:border-teal-400/40 transition-all"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 bg-teal-400/10 rounded-full">
+                          <FiUsers className="text-2xl text-teal-400" />
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-semibold text-white">
+                            {dev.name}
+                          </h3>
+                          <p className="text-sm text-teal-300">{dev.role}</p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
                 </div>
-              </motion.div>
-            ))}
-          </div>
+
+                {/* Toggle Button */}
+                {isMobile && developers.length > 4 && (
+                  <div className="text-center mt-6">
+                    <button
+                      onClick={() => setShowAll(!showAll)}
+                      className="text-teal-400 hover:underline text-sm font-medium"
+                    >
+                      {showAll ? "Show Less" : "Show More"}
+                    </button>
+                  </div>
+                )}
+              </>
+            );
+          })()}
+
           <p className="text-center text-gray-400 mt-8">
-            And supported by our incredible community <FiHeart className="inline-block" />
+            And supported by our incredible community{" "}
+            <FiHeart className="inline-block" />
           </p>
         </div>
       </section>
-
       {/* Interactive MIDI Player Section */}
       <section className="w-full py-20 bg-gradient-to-b from-gray-950 to-gray-900">
-        <div className="max-w-6xl mx-auto px-4">
-          <h3 className="text-3xl font-bold text-center text-emerald-400 mb-12">
-            Experience Our MIDI Library
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {midiTracks.map((track, idx) => (
-              <div
-                key={idx}
-                className={`bg-gray-800/50 backdrop-blur-md p-4 rounded-2xl border ${
-                  currentTrack === track.src
-                    ? "border-teal-400/60"
-                    : "border-gray-700"
-                } transition-all`}
-              >
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex-1">
-                    <p className="font-semibold text-white truncate">
-                      {track.title}
-                    </p>
-                    <p className="text-sm text-teal-300">{track.artist}</p>
-                    <p className="text-xs text-gray-400">{track.duration}</p>
-                  </div>
-                  <button
-                    onClick={() => toggleAudio(track)}
-                    className="p-3 bg-teal-400/10 rounded-full hover:bg-teal-400/20 transition-colors"
-                  >
-                    {currentTrack === track.src ? (
-                      <FiPause className="text-xl text-teal-400" />
-                    ) : (
-                      <FiPlay className="text-xl text-teal-400" />
-                    )}
-                  </button>
+        <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {midiTracks.map((track, idx) => (
+            <div
+              key={idx}
+              className="bg-gray-800/50 p-4 rounded-2xl border transition-all"
+            >
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="font-semibold text-white">{track.title}</p>
+                  <p className="text-sm text-teal-300">{track.artist}</p>
                 </div>
-
-                {currentTrack === track.src && (
-                  <div className="mt-4 space-y-2">
-                    <div
-                      className="h-2 bg-gray-700 rounded-full cursor-pointer relative"
-                      onClick={seekAudio}
-                    >
-                      <div
-                        className="absolute left-0 top-0 h-2 bg-teal-400 rounded-full transition-all duration-100"
-                        style={{ width: `${progress}%` }}
-                      />
-                    </div>
-                    <div className="flex justify-between text-xs text-gray-400">
-                      <span>{formatTime(duration * (progress / 100))}</span>
-                      <span>{formatTime(duration)}</span>
-                    </div>
-                  </div>
-                )}
+                <button
+                  onClick={() => toggleAudio(track.src)}
+                  className="p-2 bg-teal-400/10 rounded-full"
+                >
+                  {currentTrack === track.src ? <FiPause /> : <FiPlay />}
+                </button>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
+              {/* Progress & Duration */}
+              {currentTrack === track.src && (
+                <div className="mt-4">
+                  <div
+                    className="h-2 bg-gray-700 rounded-full cursor-pointer"
+                    onClick={(e) => {
+                      const pct = e.nativeEvent.offsetX / e.target.clientWidth;
+                      audioRef.current.currentTime =
+                        pct * audioRef.current.duration;
+                    }}
+                  >
+                    <div
+                      className="h-full bg-teal-400 rounded-full"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                  <div className="flex justify-between text-xs text-gray-400 mt-1">
+                    <span>
+                      {formatTime(
+                        (durations[currentTrack] || 0) * (progress / 100)
+                      )}
+                    </span>
+                    <span>{formatTime(durations[currentTrack] || 0)}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Hidden audio element */}
+        {/* Hidden audio element managed by React */}
+        <audio ref={audioRef} className="hidden" />
+      </section>
       {/* Screenshots Gallery */}
       <section className="w-full py-20 bg-gray-900">
         <div className="max-w-7xl mx-auto px-4">
@@ -439,7 +478,6 @@ const Hero = () => {
           </Swiper>
         </div>
       </section>
-
       {/* Community Section */}
       <section className="w-full py-20 bg-gray-950/50 backdrop-blur-md">
         <div className="max-w-4xl mx-auto px-4 text-center">
